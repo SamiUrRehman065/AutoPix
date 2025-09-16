@@ -1,10 +1,16 @@
-# 🖼️ AutoPix: AI Image Captioning & Classification
+# 🖼️ AutoPix: AI-Powered Image Tools
 
 ## 📌 Overview
 
-**AutoPix** is an AI-powered image processing app that performs **automatic image captioning** and **image classification**. Built using **Python**, **PyTorch**, and **Gradio**, it provides a user-friendly web interface for testing AI models on images.
+**AutoPix** is an AI-powered toolkit that performs:
 
-This project demonstrates modular AI design, separating **model logic**, **interface logic**, and **deployment with Gradio**.
+* **Automatic image captioning** with BLIP
+* **Image classification** with ResNet
+* **Bulk automation** for scraping and processing images from websites or local folders
+
+Built using **Python**, **PyTorch**, and **Gradio**, it provides a clean, tabbed web interface with CSV export support.
+
+This project demonstrates a **modular AI app architecture**, clean separation of **models**, **interfaces**, and **utility code**, and user-friendly deployment with Gradio.
 
 ---
 
@@ -12,116 +18,152 @@ This project demonstrates modular AI design, separating **model logic**, **inter
 
 ### 🖼️ Image Captioning
 
-* Generates descriptive captions for uploaded images
-* Powered by **BLIP model**
+* Generate natural language captions for single images
+* Powered by the **BLIP model**
 
 ### 🏷️ Image Classification
 
-* Classifies images into categories using **ResNet model**
-* Returns top predicted label with confidence score
+* Predicts object categories using **ResNet**
+* Returns top label with confidence score
+
+### 🤖 Automation (Bulk Mode)
+
+* Process **all images from a web page URL**
+* Or process **all images in a local directory**
+* Saves results (image path, caption, classification, confidence) into a **downloadable CSV**
+* Handles errors gently and reports them in the CSV
 
 ### 🌐 Web Interface
 
-* Built with **Gradio**
-* Interactive UI for uploading images and getting real-time results
-* Handles multiple image formats gracefully
+* Built with **Gradio TabbedInterface**
+* Three main tabs:
+
+  * BLIP Captioning
+  * ResNet Classification
+  * Automation (URL / Local)
 
 ---
 
 ## 🧱 Project Structure
 
 ```
-AutoPix/
-├── interfaces/
-│   ├── caption_interface.py
-│   └── classifier_interface.py
-├── models/
-│   ├── blip_model.py
-│   └── resnet_model.py
-├── app.py
-├── requirements.txt
-└── .gitignore
+AUTOPIX/
+│
+├── interfaces/                       # Gradio / UI interfaces
+│   ├── automation_interface.py       # Interface for scraping/processing images (URL & local)
+│   ├── caption_interface.py          # Interface for image captioning
+│   ├── classifier_interface.py       # Interface for image classification
+│
+├── models/                           # ML model wrappers
+│   ├── blip_model.py                 # BLIP model for image captioning
+│   ├── resnet_model.py               # ResNet model for classification
+│
+├── utils/                            # Helper functions
+│   ├── automation.py                 # Core logic for scraping & processing images
+│
+├── venv/                             # Virtual environment (ignored in git)
+│
+├── .gitignore                        # Git ignore rules
+├── app.py                            # Main entry point (runs Gradio / app)
+├── README.md                         # Project documentation
+├── requirements.txt                  # Python dependencies
+
 ```
 
 ---
 
 ## 🧮 Module Breakdown
 
-| Module                    | Purpose                                         |
-| ------------------------- | ----------------------------------------------- |
-| `blip_model.py`           | Core logic for image captioning using BLIP      |
-| `resnet_model.py`         | Core logic for image classification with ResNet |
-| `caption_interface.py`    | Gradio interface for captioning                 |
-| `classifier_interface.py` | Gradio interface for classification             |
-| `app.py`                  | Launches Gradio app and manages UI routing      |
+| Module                    | Purpose                                             |
+| ------------------------- | --------------------------------------------------- |
+| `blip_model.py`           | BLIP model for image captioning                     |
+| `resnet_model.py`         | ResNet model for classification                     |
+| `caption_interface.py`    | Gradio UI for captioning                            |
+| `classifier_interface.py` | Gradio UI for classification                        |
+| `automation_interface.py` | Gradio UI for automation (URL + Local → CSV export) |
+| `automation.py`           | Logic for bulk image scraping and processing        |
+| `app.py`                  | Launches the tabbed Gradio app                      |
 
 ---
 
 ## 🖥️ How It Works
 
-### 🔍 Analysis Flow
+### 🔍 Flow for Single Images
 
-1. **User uploads an image**
-2. **Gradio interface sends the image to the corresponding model**
-3. **Model generates caption or predicts class label**
-4. **Result displayed in the Gradio interface**
+1. User uploads an image
+2. Chosen model (BLIP or ResNet) runs inference
+3. Caption / classification displayed in the UI
+
+### 🔍 Flow for Automation
+
+1. User enters **URL** or **local directory path**
+2. AutoPix fetches all images
+3. Each image is captioned and classified
+4. A **CSV file** is generated for download
+5. Errors (like 403 forbidden) are written in the CSV too, not just hidden
 
 ---
 
 ## 🖥️ Technologies Used
 
-| Technology   | Role                             |
-| ------------ | -------------------------------- |
-| Python       | Backend scripting                |
-| PyTorch      | Model training and inference     |
-| Gradio       | Web interface for AI interaction |
-| Pillow       | Image processing                 |
-| Transformers | Pretrained models for captioning |
-| Requests     | HTTP requests if needed          |
+| Technology      | Role                             |
+| --------------- | -------------------------------- |
+| Python          | Backend scripting                |
+| PyTorch         | Model inference                  |
+| Gradio          | Web interface for AI interaction |
+| Pillow          | Image processing                 |
+| Transformers    | Pretrained models for captioning |
+| Requests        | Web scraping for automation      |
+| CSV / Tempfiles | Export & download results        |
 
 ---
 
 ## 🚀 How to Run Locally
 
-1. Clone the repository:
+1. Clone the repo:
 
    ```bash
    git clone https://github.com/SamiUrRehman065/AutoPix.git
-   ```
-2. Navigate to the project folder:
-
-   ```bash
    cd AutoPix
    ```
-3. Activate your virtual environment:
+
+2. Create and activate a virtual environment:
 
    ```bash
-   & .\venv\Scripts\Activate.ps1
+   python -m venv venv
+   & .\venv\Scripts\Activate.ps1   # Windows PowerShell
+   source venv/bin/activate        # Linux/Mac
    ```
-4. Install dependencies:
+
+3. Install dependencies:
 
    ```bash
    pip install -r requirements.txt
    ```
-5. Launch the app:
+
+4. Run the app:
 
    ```bash
    python app.py
    ```
-6. Open the browser at the Gradio link (usually `http://127.0.0.1:7860`)
+
+5. Open the browser at the Gradio link (usually `http://127.0.0.1:7860`)
 
 ---
 
-## ⚠️ Note
+## ⚠️ Notes
 
-> This project uses pretrained models. To run smoothly, ensure **Python 3.13+** and **PyTorch compatible GPU/CPU** are installed.
+* AutoPix uses **pretrained models** (BLIP, ResNet18).
+* Works with **Python 3.10+** (tested up to 3.13).
+* GPU recommended for faster processing, but CPU also supported.
+* CSVs are created as **temporary files** for user download (no clutter).
 
 ---
 
 ## 🧑‍💻 Author
 
-**Name:** Sami Ur Rehman  
-**Location:** Karachi, Pakistan  
+**Name:** Sami Ur Rehman
+**Location:** Karachi, Pakistan
 **GitHub:** [SamiUrRehman065](https://github.com/SamiUrRehman065)
 
 ---
@@ -130,25 +172,27 @@ AutoPix/
 
 ### What I Learned
 
-* Deploying AI models with Gradio
-* Structuring modular code for captioning and classification
-* Efficient image processing with PyTorch and Pillow
+* How to modularize AI apps (models, interfaces, utils)
+* Building a tabbed UI with Gradio
+* Automating bulk image scraping & captioning/classification
+* Handling errors gracefully in both UI & CSV
 
-### Challenges Faced
+### Challenges
 
-* Managing large pretrained models
-* Ensuring UI responsiveness with Gradio
-* Handling different image formats
+* Keeping folder structure clean as project grew
+* Making automation robust against broken links / 403s
+* Avoiding leftover CSV clutter
 
-### Solutions Implemented
+### Solutions
 
-* Modular interfaces for captioning & classification
-* Cached models for faster inference
-* Clean folder structure for maintainability
+* Introduced `utils/automation.py` for reusable logic
+* Used Python `tempfile` for on-demand CSV download
+* Tabbed Gradio design keeps UI simple yet powerful
 
 ---
 
 ## 🤝 Contributing
 
-Contributions welcome!
-Open issues or submit pull requests for bugs, suggestions, or improvements.
+Contributions welcome! 🎉
+Feel free to open issues or submit PRs with new features, bug fixes, or improvements.
+
