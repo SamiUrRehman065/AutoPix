@@ -1,0 +1,39 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Virtual environment
+venv/
+env/
+.venv/
+*.env
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# PyTorch / TensorFlow cache files
+*.pt
+*.pth
+*.ckpt
+
+# VS Code settings
+.vscode/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Python packaging
+*.egg-info/
+dist/
+build/
+
+# Others
+*.egg
+*.sqlite3
